@@ -67,8 +67,7 @@ def PrepareDataset(speed_matrix, BATCH_SIZE = 40, seq_len = 10, pred_len = 1, tr
 
 
 if __name__ == "__main__":
-    data = 'inrix'
-#    data = 'loop'
+    data = 'loop'
     if data == 'inrix':
         speed_matrix =  pd.read_pickle('../Data/inrix_seattle_speed_matrix_2012')
         A = np.load('../Data/INRIX_Seattle_2012_A.npy')
@@ -78,34 +77,30 @@ if __name__ == "__main__":
         FFR_20min = np.load('../Data/INRIX_Seattle_2012_reachability_free_flow_20min.npy')
         FFR_25min = np.load('../Data/INRIX_Seattle_2012_reachability_free_flow_25min.npy')
         FFR = [FFR_5min, FFR_10min, FFR_15min, FFR_20min, FFR_25min]
+    
     elif data == 'loop':
-        speed_matrix =  pd.read_pickle('../Data/speed_matrix_2015')
-        A = np.load('../Data/Loop_Seattle_2015_A.npy')
-        FFR_5min = np.load('../Data/Loop_Seattle_2015_reachability_free_flow_5min.npy')
-        FFR_10min = np.load('../Data/Loop_Seattle_2015_reachability_free_flow_10min.npy')
-        FFR_15min = np.load('../Data/Loop_Seattle_2015_reachability_free_flow_15min.npy')
-        FFR_20min = np.load('../Data/Loop_Seattle_2015_reachability_free_flow_20min.npy')
-        FFR_25min = np.load('../Data/Loop_Seattle_2015_reachability_free_flow_25min.npy')
+        speed_matrix =  pd.read_pickle('Data/speed_matrix_2015')
+        A = np.load('Data/Loop_Seattle_2015_A.npy')
+        FFR_5min = np.load('Data/Loop_Seattle_2015_reachability_free_flow_5min.npy')
+        FFR_10min = np.load('Data/Loop_Seattle_2015_reachability_free_flow_10min.npy')
+        FFR_15min = np.load('Data/Loop_Seattle_2015_reachability_free_flow_15min.npy')
+        FFR_20min = np.load('Data/Loop_Seattle_2015_reachability_free_flow_20min.npy')
+        FFR_25min = np.load('Data/Loop_Seattle_2015_reachability_free_flow_25min.npy')
         FFR = [FFR_5min, FFR_10min, FFR_15min, FFR_20min, FFR_25min]
-#        
-#    train_dataloader, valid_dataloader, test_dataloader, max_speed = PrepareDataset(speed_matrix)
-#
-    rnn, rnn_loss = TrainRNN(train_dataloader, valid_dataloader, num_epochs = 1)
-    ### rnn_loss = [losses_train, losses_interval_train, losses_valid, losses_interval_valid]
-    rnn_test = TestRNN(rnn, test_dataloader, max_speed ) 
-    ### rnn_test = [losses_l1, losses_mse, mean_l1, std_l1]
+        
+    train_dataloader, valid_dataloader, test_dataloader, max_speed = PrepareDataset(speed_matrix)
+
+    #rnn, rnn_loss = TrainRNN(train_dataloader, valid_dataloader, num_epochs = 1)
+    #rnn_loss = [losses_train, losses_interval_train, losses_valid, losses_interval_valid]
+    #rnn_test = TestRNN(rnn, test_dataloader, max_speed ) 
+    #rnn_test = [losses_l1, losses_mse, mean_l1, std_l1]
     
-    lstm, lstm_loss = TrainLSTM(train_dataloader, valid_dataloader, num_epochs = 1)
-    lstm_test = TestLSTM(lstm, test_dataloader, max_speed )
+    #lstm, lstm_loss = TrainLSTM(train_dataloader, valid_dataloader, num_epochs = 1)
+    #lstm_test = TestLSTM(lstm, test_dataloader, max_speed )
     
-    gclstm, gclstm_loss = TrainGraphConvolutionalLSTM(train_dataloader, valid_dataloader, A, FFR, K=3, back_length = 2, num_epochs = 1, Clamp_A = True)
+    gclstm, gclstm_loss = TrainGraphConvolutionalLSTM(train_dataloader, valid_dataloader, A, FFR, K=3, back_length=2, num_epochs=1, Clamp_A=True)
     gclstm_test = TestGraphConvolutionalLSTM(gclstm, test_dataloader, max_speed)
         
-    gclstm_proposed, gclstm_proposed_loss = TrainGraphConvolutionalLSTM_Proposed(train_dataloader, valid_dataloader, A, FFR, K=3, back_length = 2, num_epochs = 1, Clamp_A = True, lambda_Aweight = 0.01, lambda_fea = 0.01)
+    gclstm_proposed, gclstm_proposed_loss = TrainGraphConvolutionalLSTM_Proposed(train_dataloader, valid_dataloader, A, FFR, K=3, back_length=2, num_epochs=1, Clamp_A=True, lambda_Aweight=0.01, lambda_fea=0.01)
     gclstm_proposed_test = TestGraphConvolutionalLSTM(gclstm_proposed, test_dataloader, max_speed)
 
-        
-        
-        
-        
-        
