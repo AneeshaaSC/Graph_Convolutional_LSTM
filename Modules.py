@@ -13,23 +13,22 @@ from torch.nn.parameter import Parameter
 import math
 
 
-
 class FilterLinear(nn.Module):
     def __init__(self, in_features, out_features, filter_square_matrix, bias=True):
-        '''
+        """
         filter_square_matrix : filter square matrix, whose each elements is 0 or 1.
-        '''
+        """
         super(FilterLinear, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
-        
+
         use_gpu = torch.cuda.is_available()
         self.filter_square_matrix = None
         if use_gpu:
             self.filter_square_matrix = Variable(filter_square_matrix.cuda(), requires_grad=False)
         else:
             self.filter_square_matrix = Variable(filter_square_matrix, requires_grad=False)
-        
+
         self.weight = Parameter(torch.Tensor(out_features, in_features))
         if bias:
             self.bias = Parameter(torch.Tensor(out_features))
